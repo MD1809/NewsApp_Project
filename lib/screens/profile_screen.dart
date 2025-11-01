@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:news_app_project/screens/login_screen.dart';
 import 'package:news_app_project/screens/signup_screen.dart';
 import 'package:news_app_project/screens/main_screen.dart';
+import 'package:news_app_project/screens/change_password_screen.dart';
+
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -180,7 +182,12 @@ class ProfileScreen extends StatelessWidget {
               buildSettingItem(
                 icon: Icons.lock,
                 text: "Change password",
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ChangePasswordScreen()),
+                  );
+                },
               ),
               buildSettingItem(
                 icon: Icons.description_outlined,
