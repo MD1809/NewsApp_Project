@@ -1,15 +1,19 @@
 
 import 'package:flutter/material.dart';
-
 import 'package:news_app_project/widgets/setting_item.dart';
-
 import 'package:news_app_project/screens/termsAndConditionsScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:news_app_project/screens/login_screen.dart';
+import 'package:news_app_project/screens/signup_screen.dart';
+import 'package:news_app_project/screens/main_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       backgroundColor: const Color(0xFFF8F8F8),
       appBar: AppBar(
@@ -27,6 +31,7 @@ class ProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -40,111 +45,179 @@ class ProfileScreen extends StatelessWidget {
                     child: Icon(Icons.person, size: 40, color: Colors.black54),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    "Đăng nhập để cá nhân hóa trải nghiệm của bạn",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 14),
+                  if(user == null) ...[
+                    const Text(
+                      "Đăng nhập để cá nhân hóa trải nghiệm của bạn",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                    const SizedBox(height: 14),
 
-                  // Login / Register buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                    // Login / Register buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            "Đăng nhập",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                        child: const Text(
-                          "Đăng nhập",
-                          style: TextStyle(
-                            color: Colors.white,
+                        const SizedBox(width: 10),
+                        OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SignUpScreen()),
+                            );
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Colors.blue),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            "Đăng ký",
+                            style: TextStyle(color: Colors.blue),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.blue),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          "Đăng ký",
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ]else ...[
+                    FutureBuilder<DocumentSnapshot>(
+                      future: FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) return const CircularProgressIndicator();
+
+                        var data = snapshot.data!.data() as Map<String, dynamic>?;
+
+                        return Column(
+                          children: [
+                            const Text("Đã đăng nhập với tài khoản"),
+                            Text(
+                              data?['username'] ?? user.email ?? "Không có tên",
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        );
+                      },
+                    )
+                  ],
                 ],
               ),
             ),
 
             const SizedBox(height: 24),
 
-            sectionTitle("Profile"),
-            buildSettingItem(
-              icon: Icons.edit,
-              text: "Edit Profile",
-              onTap: () {},
-            ),
-
-            const SizedBox(height: 24),
-
-            sectionTitle("Setting"),
-            buildSettingItem(
-              icon: Icons.language,
-              text: "Language",
-              onTap: () {},
-            ),
-            buildSettingItem(
-              icon: Icons.notifications,
-              text: "Notifications",
-              onTap: () {},
-            ),
-
-            const SizedBox(height: 24),
-
-            sectionTitle("Other"),
-            buildSettingItem(
-              icon: Icons.lock,
-              text: "Change password",
-              onTap: () {},
-            ),
-            buildSettingItem(
-              icon: Icons.description_outlined,
-              text: "Terms & conditions",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const TermsScreen()),
-                );
-              },
-            ),
-
-            const SizedBox(height: 10),
-
-            Container(
-              margin: const EdgeInsets.only(top: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
-                leading: const Icon(Icons.logout, color: Colors.red),
-                title: const Text(
-                  "Logout",
-                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
-                ),
+            if(user == null) ...[
+              sectionTitle("Setting"),
+              buildSettingItem(
+                icon: Icons.language,
+                text: "Language",
                 onTap: () {},
               ),
-            ),
+              buildSettingItem(
+                icon: Icons.notifications,
+                text: "Notifications",
+                onTap: () {},
+              ),
+
+              const SizedBox(height: 24),
+
+              sectionTitle("Other"),
+              buildSettingItem(
+                icon: Icons.description_outlined,
+                text: "Terms & conditions",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const TermsScreen()),
+                  );
+                },
+              ),
+            ]else ...[
+              sectionTitle("Profile"),
+              buildSettingItem(
+                icon: Icons.edit,
+                text: "Edit Profile",
+                onTap: () {},
+              ),
+
+              const SizedBox(height: 24),
+
+              sectionTitle("Setting"),
+              buildSettingItem(
+                icon: Icons.language,
+                text: "Language",
+                onTap: () {},
+              ),
+              buildSettingItem(
+                icon: Icons.notifications,
+                text: "Notifications",
+                onTap: () {},
+              ),
+
+              const SizedBox(height: 24),
+
+              sectionTitle("Other"),
+              buildSettingItem(
+                icon: Icons.lock,
+                text: "Change password",
+                onTap: () {},
+              ),
+              buildSettingItem(
+                icon: Icons.description_outlined,
+                text: "Terms & conditions",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const TermsScreen()),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 10),
+
+              Container(
+                margin: const EdgeInsets.only(top: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.logout, color: Colors.red),
+                  title: const Text(
+                    "Logout",
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                  ),
+                  onTap: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MainScreen()),
+                          (route) => false,
+                    );
+                  },
+                ),
+              ),
+            ],
           ],
         ),
       ),

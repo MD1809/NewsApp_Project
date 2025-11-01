@@ -36,10 +36,14 @@ dependencies:
   http: ^1.5.0     # http để call api.
   timeago: ^3.7.1  # định dạng thời gian theo giờ.
   intl: ^0.20.2    # định dạng thời gian theo ngày.
+  crypto: ^3.0.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  firebase_core: ^4.2.0   # sử dụng firebase
+  firebase_auth: ^6.1.1   # sử dụng auth của firebase làm chức năng đăng ký đăng nhập
+  cloud_firestore: ^6.0.3 # sử dùng firestore
 
 dev_dependencies:
   flutter_test:

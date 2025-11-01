@@ -17,8 +17,8 @@ class DatabaseNewsApp {
 
   // Hàm khởi tạo DB (tạo file lưu trong máy)
   Future<Database> _initDB(String filePath) async {
-    final dbPath = await getDatabasesPath(); // Thư mục mặc định của SQLite
-    final path = join(dbPath, filePath); // Nối đường dẫn đến file articles.db
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, filePath);
 
     // Mở (hoặc tạo mới) database
     return await openDatabase(
@@ -113,6 +113,5 @@ class DatabaseNewsApp {
     }
 
     await deleteDatabase(path);
-    print('✅ Database đã được xóa: $path');
   }
 }

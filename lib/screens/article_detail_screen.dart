@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:news_app_project/models/news_model.dart';
 import 'package:news_app_project/utils/date_utils.dart';
-import 'package:news_app_project/services/database.dart';
+import 'package:news_app_project/services/firestore_service.dart';
 
 class Articledetailscreen extends StatefulWidget {
 
@@ -28,21 +28,25 @@ class _ArticledetailscreenState extends State<Articledetailscreen> {
   }
   // Kiểm tra bài viết đã được lưu chưa
   void checkIfSaved() async {
-    final saved = await DatabaseNewsApp.instance.isSaved(widget.article.url);
+    bool saved = await ArticleService.isArticleSaved(widget.article.url);
     setState(() {
       isSaved = saved;
     });
   }
 
+  /// Lưu hoặc xóa bài viết
   void toggleSave() async {
     if (isSaved) {
-      // Xoá bài viết
-      await DatabaseNewsApp.instance.deleteArticleByUrl(widget.article.url);
+      await ArticleService.deleteArticle(widget.article.url);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Đã bỏ lưu bài viết')),
+      );
     } else {
-      // Lưu bài viết
-      await DatabaseNewsApp.instance.insertArticle(widget.article);
+      await ArticleService.saveArticle(widget.article);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Đã lưu bài viết')),
+      );
     }
-
     setState(() {
       isSaved = !isSaved;
     });

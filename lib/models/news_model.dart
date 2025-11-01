@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NewsArticle {
   final String title;
@@ -54,6 +55,43 @@ class NewsArticle {
       imageUrl: mapArticle['imageUrl'],
       author: mapArticle['author'],
       publishedAt: DateTime.parse(mapArticle['publishedAt']),
+    );
+  }
+
+  /// 🔹 Chuyển sang Map để lưu vào Firestore
+  Map<String, dynamic> toFirestore() {
+    return {
+      'title': title,
+      'description': description,
+      'content': content,
+      'url': url,
+      'imageUrl': imageUrl,
+      'author': author,
+      'publishedAt': Timestamp.fromDate(publishedAt), // 👉 Lưu Timestamp Firestore
+    };
+  }
+
+  /// 🔹 Chuyển từ Firestore snapshot sang NewsArticle
+  factory NewsArticle.fromFirestore(Map<String, dynamic> data) {
+    final publishedField = data['publishedAt'];
+    DateTime publishedTime;
+
+    if (publishedField is Timestamp) {
+      publishedTime = publishedField.toDate();
+    } else if (publishedField is String) {
+      publishedTime = DateTime.tryParse(publishedField) ?? DateTime.now();
+    } else {
+      publishedTime = DateTime.now();
+    }
+
+    return NewsArticle(
+      title: data['title'] ?? '',
+      description: data['description'] ?? '',
+      content: data['content'] ?? '',
+      url: data['url'] ?? '',
+      imageUrl: data['imageUrl'] ?? '',
+      author: data['author'] ?? '',
+      publishedAt: publishedTime,
     );
   }
 }
