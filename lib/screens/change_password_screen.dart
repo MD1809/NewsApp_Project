@@ -91,7 +91,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Đổi mật khẩu'), centerTitle: true),
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: const Text('Đổi mật khẩu'), backgroundColor: Colors.white, centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
         child: Column(

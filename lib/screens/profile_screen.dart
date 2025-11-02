@@ -8,6 +8,7 @@ import 'package:news_app_project/screens/login_screen.dart';
 import 'package:news_app_project/screens/signup_screen.dart';
 import 'package:news_app_project/screens/main_screen.dart';
 import 'package:news_app_project/screens/change_password_screen.dart';
+import 'package:news_app_project/screens/edit_profile_screen.dart';
 
 
 class ProfileScreen extends StatelessWidget {
@@ -159,7 +160,12 @@ class ProfileScreen extends StatelessWidget {
               buildSettingItem(
                 icon: Icons.edit,
                 text: "Edit Profile",
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+                  );
+                },
               ),
 
               const SizedBox(height: 24),

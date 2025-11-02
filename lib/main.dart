@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:news_app_project/screens/main_screen.dart';
-import 'firebase_options.dart';
+import 'services/firebase_options.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:timeago/src/messages/vi_messages.dart';

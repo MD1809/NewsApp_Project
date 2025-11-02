@@ -40,7 +40,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
         'uid': user.uid,
         'username': _usernameController.text.trim(),
-        'email': _emailController.text.trim(),
+        'gender': 'hidden',  // mặc định là ẩn
+        'birthday': null,    // mặc định chưa có ngày sinh
         'createdAt': FieldValue.serverTimestamp(),
       });
 
