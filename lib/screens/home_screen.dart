@@ -24,6 +24,9 @@ class _HomePageContentState extends State<HomePageContent> {
   Future<List<NewsArticle>>? _trendingFuture;
   Future<List<NewsArticle>>? _newsFuture;
 
+  String _searchQuery = "";
+  Future<List<NewsArticle>>? _searchFuture;
+
   String selectedCategory = "All";
   final List<String> categories = [
     "All",
@@ -49,6 +52,17 @@ class _HomePageContentState extends State<HomePageContent> {
     });
   }
 
+  void _onSearch(String query) {
+    setState(() {
+      _searchQuery = query.trim();
+      if (_searchQuery.isNotEmpty) {
+        _searchFuture = _newsService.searchNews(_searchQuery);
+      } else {
+        _searchFuture = null;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +81,7 @@ class _HomePageContentState extends State<HomePageContent> {
                 padding: EdgeInsets.only(bottom: 8),
                 child: Row(
                   children: [
-                    Expanded(child: CustomSearchBar()),
+                    Expanded(child: CustomSearchBar(onSubmitted: _onSearch)),
                     const SizedBox(width: 20),
                     const SizedBox(
                       width: 54,
@@ -88,126 +102,174 @@ class _HomePageContentState extends State<HomePageContent> {
                 ),
               ),
               Expanded(
-                child: ListView(
-                  children: [
-                    const SizedBox(height: 24),
-                    SectionHeader(title: "Trending"),
-                    const SizedBox(height: 16),
-                    FutureBuilder<List<NewsArticle>>(
-                      future: _trendingFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Center(child: Text("Lỗi: ${snapshot.error}"));
-                        } else if (snapshot.hasData) {
-                          final newsList = snapshot.data!;
-                          if (newsList.isEmpty) {
+                child: _searchQuery.isNotEmpty
+                    ? FutureBuilder<List<NewsArticle>>(
+                        future: _searchFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text('Lỗi: ${snapshot.error}'),
+                            );
+                          } else if (snapshot.hasData) {
+                            final articles = snapshot.data!;
+                            if (articles.isEmpty) {
+                              return const Center(
+                                child: Text("Không có bài viết."),
+                              );
+                            }
+                            return ListView.builder(
+                              itemCount: articles.length,
+                              itemBuilder: (context, index) {
+                                final article = articles[index];
+                                return ArticleFormsmallCard(
+                                  image: article.imageUrl,
+                                  title: article.title,
+                                  content: article.content,
+                                  authorName: article.author,
+                                  publishedAt: article.publishedAt,
+                                  description: article.description,
+                                  url: article.url,
+                                );
+                              },
+                            );
+                          } else {
                             return const Center(
                               child: Text("Không có bài viết."),
                             );
                           }
+                        },
+                      )
+                    : ListView(
+                        children: [
+                          const SizedBox(height: 24),
+                          SectionHeader(title: "Trending"),
+                          const SizedBox(height: 16),
+                          FutureBuilder<List<NewsArticle>>(
+                            future: _trendingFuture,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                  child: Text("Lỗi: ${snapshot.error}"),
+                                );
+                              } else if (snapshot.hasData) {
+                                final newsList = snapshot.data!;
+                                if (newsList.isEmpty) {
+                                  return const Center(
+                                    child: Text("Không có bài viết."),
+                                  );
+                                }
 
-                          // Lấy tối đa 8 bài
-                          final trendingList = newsList.take(4).toList();
+                                // Lấy tối đa 8 bài
+                                final trendingList = newsList.take(4).toList();
 
-                          return SingleChildScrollView(
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: trendingList.map((article) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 18,
+                                        ),
+                                        child: ArticleFormbigCard(
+                                          widthArticle: 320.0,
+                                          image: article.imageUrl,
+                                          NameArticle: article.title,
+                                          publishedAt: article.publishedAt,
+                                          author: article.author,
+                                          content: article.content,
+                                          description: article.description,
+                                          urlTrending: article.url,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                );
+                              } else {
+                                return const Center(
+                                  child: Text("Không có bài viết."),
+                                );
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                          SectionHeader(title: "Latest"),
+                          const SizedBox(height: 16),
+                          SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              children: trendingList.map((article) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 18),
-                                  child: ArticleFormbigCard(
-                                    widthArticle: 320.0,
-                                    image: article.imageUrl,
-                                    NameArticle: article.title,
-                                    publishedAt: article.publishedAt,
-                                    author: article.author,
-                                    content: article.content,
-                                    description: article.description,
-                                    urlTrending: article.url,
-                                  ),
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: categories.map((category) {
+                                return CategoryButton(
+                                  text: category,
+                                  isSelected: selectedCategory == category,
+                                  onTap: () => onCategorySelected(category),
                                 );
                               }).toList(),
                             ),
-                          );
-                        } else {
-                          return const Center(
-                            child: Text("Không có bài viết."),
-                          );
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 30),
-                    SectionHeader(title: "Latest"),
-                    const SizedBox(height: 16),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: categories.map((category) {
-                          return CategoryButton(
-                            text: category,
-                            isSelected: selectedCategory == category,
-                            onTap: () => onCategorySelected(category),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    FutureBuilder<List<NewsArticle>>(
-                      future: _newsFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          // Khi đang tải dữ liệu
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.hasError) {
-                          // Nếu có lỗi
-                          return Center(child: Text('Lỗi: ${snapshot.error}'));
-                        } else if (snapshot.hasData) {
-                          final newsList = snapshot.data!;
+                          ),
+                          const SizedBox(height: 16),
+                          FutureBuilder<List<NewsArticle>>(
+                            future: _newsFuture,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                // Khi đang tải dữ liệu
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (snapshot.hasError) {
+                                // Nếu có lỗi
+                                return Center(
+                                  child: Text('Lỗi: ${snapshot.error}'),
+                                );
+                              } else if (snapshot.hasData) {
+                                final newsList = snapshot.data!;
 
-                          if (newsList.isEmpty) {
-                            return const Center(
-                              child: Text("Không có bài viết."),
-                            );
-                          }
-                          // Lấy 10 bài đầu tiên
-                          final limitedList = newsList.take(6).toList();
+                                if (newsList.isEmpty) {
+                                  return const Center(
+                                    child: Text("Không có bài viết."),
+                                  );
+                                }
+                                // Lấy 10 bài đầu tiên
+                                final limitedList = newsList.take(6).toList();
 
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: limitedList.length,
-                            itemBuilder: (context, index) {
-                              final article = limitedList[index];
-                              return ArticleFormsmallCard(
-                                image: article.imageUrl,
-                                title: article.title,
-                                content: article.content,
-                                authorName: article.author,
-                                publishedAt: article.publishedAt,
-                                description: article.description,
-                                url: article.url,
-                              );
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: limitedList.length,
+                                  itemBuilder: (context, index) {
+                                    final article = limitedList[index];
+                                    return ArticleFormsmallCard(
+                                      image: article.imageUrl,
+                                      title: article.title,
+                                      content: article.content,
+                                      authorName: article.author,
+                                      publishedAt: article.publishedAt,
+                                      description: article.description,
+                                      url: article.url,
+                                    );
+                                  },
+                                );
+                              } else {
+                                // Không có dữ liệu
+                                return const Center(
+                                  child: Text("Không có bài viết."),
+                                );
+                              }
                             },
-                          );
-                        } else {
-                          // Không có dữ liệu
-                          return const Center(
-                            child: Text("Không có bài viết."),
-                          );
-                        }
-                      },
-                    ),
-                  ],
-                ),
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),

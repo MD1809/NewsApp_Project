@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatefulWidget {
-  const CustomSearchBar({super.key});
+  // 1. Thêm biến để "hứng" hàm onSubmitted
+  final Function(String)? onSubmitted;
+
+  const CustomSearchBar({
+    super.key,
+    this.onSubmitted, // 2. Thêm nó vào constructor
+  });
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
@@ -11,6 +17,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onSubmitted: widget.onSubmitted,
       cursorColor: Colors.lightBlue,
       decoration: InputDecoration(
         filled: true,

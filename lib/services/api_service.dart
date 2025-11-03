@@ -102,4 +102,26 @@ class NewsApiService {
 
     return result;
   }
+  // ============================
+  // Hàm tìm kiếm bài viết
+  // ============================
+  Future<List<NewsArticle>> searchNews(String query) async {
+    if (query.isEmpty) return [];
+
+    final Uri url = Uri.parse(
+      'https://newsapi.org/v2/everything?q=$query&language=en&sortBy=publishedAt&pageSize=18&apiKey=$apiKey',
+    );
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final List articlesJson = data['articles'];
+      return articlesJson
+          .map((json) => NewsArticle.fromJson(json))
+          .toList();
+    } else {
+      throw Exception('Lỗi khi gọi API: ${response.statusCode}');
+    }
+  }
 }
