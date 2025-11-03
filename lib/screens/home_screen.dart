@@ -188,7 +188,7 @@ class _HomePageContentState extends State<HomePageContent> {
                                           author: article.author,
                                           content: article.content,
                                           description: article.description,
-                                          urlTrending: article.url,
+                                          url: article.url,
                                         ),
                                       );
                                     }).toList(),

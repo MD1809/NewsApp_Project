@@ -101,7 +101,7 @@ class _NewsByCategoryScreenState extends State<NewsByCategoryScreen> {
                         author: news.author,
                         content: news.content,
                         description: news.description,
-                        urlTrending: news.url,
+                        url: news.url,
                       ),
                     );
                   },

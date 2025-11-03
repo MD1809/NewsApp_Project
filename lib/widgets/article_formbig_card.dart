@@ -10,7 +10,7 @@ class ArticleFormbigCard extends StatelessWidget {
   final DateTime publishedAt;
   final String author;
   final String content;
-  final String urlTrending;
+  final String url;
   final String description;
 
   final double? widthArticle;
@@ -23,7 +23,7 @@ class ArticleFormbigCard extends StatelessWidget {
     required this.author,
     required this.content,
     required this.description,
-    required this.urlTrending,
+    required this.url,
     this.widthArticle,
   });
 
@@ -39,7 +39,7 @@ class ArticleFormbigCard extends StatelessWidget {
           author: author,
           publishedAt: publishedAt,
           description: description,
-          url: urlTrending,
+          url: url,
         );
 
         Navigator.push(
