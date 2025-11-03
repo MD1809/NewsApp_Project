@@ -92,11 +92,11 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
           .doc(_safeId(url))
           .delete();
     } else {
-      // 🔹 Xoá bài viết cục bộ (SQLite)
+      // Xoá bài viết cục bộ (SQLite)
       await DatabaseNewsApp.instance.deleteArticleByUrl(url);
     }
 
-    // 🔁 Load lại danh sách
+    // Load lại danh sách
     await loadSavedArticles();
   }
 
@@ -120,14 +120,14 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
             children: [
               Row(
                 children: [
-                  Text("Các bài đã lưu", style: TextStyle(fontSize: 18)),
+                  Text("Saved Articles", style: TextStyle(fontSize: 18)),
                 ],
               ),
               SizedBox(height: 10),
               Expanded(
                 child: savedArticles.isEmpty
                     ? const Center(
-                        child: Text("Chưa có bài viết nào được lưu."),
+                        child: Text("No saved articles yet."),
                       )
                     : ListView.builder(
                         itemCount: savedArticles.length,

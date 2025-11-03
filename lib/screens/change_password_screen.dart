@@ -21,13 +21,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     if (user == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Chưa đăng nhập!')));
+      ).showSnackBar(const SnackBar(content: Text('You are not logged in!')));
       return;
     }
 
     if (_newPasswordController.text != _confirmPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Mật khẩu mới không trùng khớp')),
+        const SnackBar(content: Text('New passwords do not match')),
       );
       return;
     }
@@ -47,18 +47,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Đổi mật khẩu thành công!')));
+      ).showSnackBar(const SnackBar(content: Text('Password changed successfully!')));
 
       // Clear fields
       _oldPasswordController.clear();
       _newPasswordController.clear();
       _confirmPasswordController.clear();
     } on FirebaseAuthException catch (e) {
-      String message = 'Lỗi: ${e.message}';
+      String message = 'Error: ${e.message}';
 
       // Nếu mật khẩu cũ sai
       if (e.code == 'wrong-password') {
-        message = 'Mật khẩu cũ không đúng';
+        message = 'Incorrect old password';
       }
 
       ScaffoldMessenger.of(
@@ -92,7 +92,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Đổi mật khẩu'), backgroundColor: Colors.white, centerTitle: true),
+      appBar: AppBar(title: const Text('Change Password'), backgroundColor: Colors.white, centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
         child: Column(
@@ -100,19 +100,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             TextField(
               controller: _oldPasswordController,
               obscureText: true,
-              decoration: _inputDecoration('Mật khẩu cũ'),
+              decoration: _inputDecoration('Old Password'),
             ),
             const SizedBox(height: 24),
             TextField(
               controller: _newPasswordController,
               obscureText: true,
-              decoration: _inputDecoration('Mật khẩu mới'),
+              decoration: _inputDecoration('New Password'),
             ),
             const SizedBox(height: 24),
             TextField(
               controller: _confirmPasswordController,
               obscureText: true,
-              decoration: _inputDecoration('Xác nhận mật khẩu mới'),
+              decoration: _inputDecoration('Confirm New Password'),
             ),
             const SizedBox(height: 40),
             SizedBox(
@@ -136,7 +136,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         ),
                       )
                     : const Text(
-                        'Đổi mật khẩu',
+                        'Change Password',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,

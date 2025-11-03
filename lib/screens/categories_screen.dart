@@ -64,13 +64,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               SizedBox(height: 4),
               Row(
                 children: [
-                  Text("Tin tức theo chủ đề", style: TextStyle(fontSize: 18)),
+                  Text("News by Category", style: TextStyle(fontSize: 18)),
                 ],
               ),
               SizedBox(height: 20),
               Expanded(
                 child: isLoading
                     ? const Center(child: CircularProgressIndicator())
+                    : categoryImages.isEmpty
+                    ? const Center(child: Text('No news found for this category'))
                     : GridView.builder(
                         itemCount: categoryNames.length,
                         gridDelegate:

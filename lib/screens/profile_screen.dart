@@ -50,7 +50,7 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   if(user == null) ...[
                     const Text(
-                      "Đăng nhập để cá nhân hóa trải nghiệm của bạn",
+                      "Log in to personalize your experience",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14, color: Colors.black54),
                     ),
@@ -75,7 +75,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            "Đăng nhập",
+                            "Login",
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -97,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            "Đăng ký",
+                            "Sign Up",
                             style: TextStyle(color: Colors.blue),
                           ),
                         ),
@@ -113,9 +113,9 @@ class ProfileScreen extends StatelessWidget {
 
                         return Column(
                           children: [
-                            const Text("Đã đăng nhập với tài khoản"),
+                            const Text("Logged in with account"),
                             Text(
-                              data?['username'] ?? user.email ?? "Không có tên",
+                              data?['username'] ?? user.email ?? "No name available",
                               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                           ],

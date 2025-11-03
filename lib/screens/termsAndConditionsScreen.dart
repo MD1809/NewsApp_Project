@@ -10,7 +10,7 @@ class TermsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
-        title: const Text("Điều khoản & Điều kiện"),
+        title: const Text("Terms & Conditions"),
         centerTitle: true,
       ),
       body: const SingleChildScrollView(
@@ -51,81 +51,80 @@ class TermsContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            "Cập nhật lần cuối: 29/10/2025",
+            "Last updated: October 29, 2025",
             style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
           ),
           const SizedBox(height: 12),
           _buildBodyText(
-            "Chào mừng bạn đến với ứng dụng đọc tin tức \"News app.\" "
-                "Vui lòng đọc kỹ các điều khoản dưới đây trước khi sử dụng. "
-                "Bằng việc sử dụng ứng dụng, bạn đồng ý bị ràng buộc bởi các điều khoản này.",
+            "Welcome to the \"News App.\" Please read the following terms carefully before using the app. "
+                "By using this application, you agree to be bound by these Terms & Conditions.",
           ),
           const SizedBox(height: 20),
 
-          _buildSectionTitle("1. Mục đích của Ứng dụng"),
+          _buildSectionTitle("1. Purpose of the Application"),
           _buildBodyText(
-            "Ứng dụng \"News app\" cung cấp các bản tin, bài viết và thông tin "
-                "được tổng hợp từ nhiều nguồn đáng tin cậy, nhằm mang đến cho người dùng trải nghiệm đọc tin tức nhanh chóng và tiện lợi. "
-                "Ứng dụng chỉ phục vụ mục đích thông tin và giải trí.",
+            "The \"News App\" provides news articles and information "
+                "aggregated from reliable sources to give users a quick and convenient news reading experience. "
+                "The app is intended solely for informational and entertainment purposes.",
           ),
           const SizedBox(height: 16),
 
-          _buildSectionTitle("2. Nguồn tin và bản quyền nội dung"),
+          _buildSectionTitle("2. News Sources and Content Copyright"),
           _buildBodyText(
-            "Tin tức trong ứng dụng có thể được tổng hợp từ nhiều nguồn khác nhau. "
-                "Mọi bản quyền nội dung thuộc về tác giả và nguồn tin gốc. "
-                "Chúng tôi không chỉnh sửa nội dung gốc ngoài việc định dạng lại để hiển thị. "
-                "Nếu bạn là chủ sở hữu nội dung và muốn yêu cầu gỡ bỏ, vui lòng liên hệ qua email hỗ trợ.",
+            "News in this app may be aggregated from various sources. "
+                "All content copyrights belong to the original authors and sources. "
+                "We do not modify the original content except for formatting it for display. "
+                "If you are the content owner and wish to request removal, please contact us via our support email.",
           ),
           const SizedBox(height: 16),
 
-          _buildSectionTitle("3. Trách nhiệm của người dùng"),
+          _buildSectionTitle("3. User Responsibilities"),
           _buildBodyText(
-            "Người dùng cam kết không sao chép, phân phối hoặc khai thác nội dung trong ứng dụng cho mục đích thương mại nếu không được phép. "
-                "Không được sử dụng ứng dụng cho các hoạt động vi phạm pháp luật hoặc gây hại đến hệ thống.",
+            "Users agree not to copy, distribute, or exploit the content in the app for commercial purposes without permission. "
+                "You must not use the app for illegal activities or any action that could harm the system.",
           ),
           const SizedBox(height: 16),
 
-          _buildSectionTitle("4. Quyền sở hữu và cấp phép"),
+          _buildSectionTitle("4. Ownership and Licensing"),
           _buildBodyText(
-            "Toàn bộ mã nguồn, thiết kế và giao diện của ứng dụng thuộc quyền sở hữu của \" Cá nhân nhà phát triển\". "
-                "Bạn chỉ được sử dụng ứng dụng cho mục đích cá nhân, phi thương mại.",
+            "All source code, design, and user interface of this application belong to the developer. "
+                "You may only use the app for personal and non-commercial purposes.",
           ),
           const SizedBox(height: 16),
 
-          _buildSectionTitle("5. Miễn trừ trách nhiệm"),
+          _buildSectionTitle("5. Disclaimer"),
           _buildBodyText(
-            "Chúng tôi không đảm bảo mọi thông tin đều chính xác hoặc luôn được cập nhật kịp thời. "
-                "Ứng dụng không chịu trách nhiệm cho thiệt hại phát sinh từ việc bạn sử dụng thông tin trong ứng dụng. "
-                "Các liên kết ngoài có thể dẫn tới trang web khác mà chúng tôi không kiểm soát nội dung.",
+            "We do not guarantee that all information is completely accurate or always up-to-date. "
+                "The app is not responsible for any damages resulting from your use of the information provided. "
+                "External links may lead to other websites whose content we do not control.",
           ),
           const SizedBox(height: 16),
 
-          _buildSectionTitle("6. Thu thập dữ liệu và quyền riêng tư"),
+          _buildSectionTitle("6. Data Collection and Privacy"),
           _buildBodyText(
-            "Ứng dụng có thể thu thập một số thông tin phi cá nhân (như lượt truy cập, thời gian sử dụng) "
-                "nhằm cải thiện trải nghiệm người dùng. Không thu thập thông tin nhạy cảm trừ khi bạn tự nguyện cung cấp. "
-                "Vui lòng xem thêm Chính sách Bảo mật để biết chi tiết.",
+            "The app may collect certain non-personal data (such as visit frequency or usage time) "
+                "to improve the user experience. Sensitive personal data will not be collected unless you voluntarily provide it. "
+                "Please refer to our Privacy Policy for more details.",
           ),
           const SizedBox(height: 16),
 
-          _buildSectionTitle("7. Cập nhật và thay đổi điều khoản"),
+          _buildSectionTitle("7. Updates and Changes to Terms"),
           _buildBodyText(
-            "Chúng tôi có thể thay đổi hoặc cập nhật các điều khoản này bất kỳ lúc nào. "
-                "Phiên bản mới sẽ được công bố trong ứng dụng và có hiệu lực ngay khi được đăng tải.",
+            "We may modify or update these terms at any time. "
+                "The new version will be published within the app and will take effect immediately upon release.",
           ),
           const SizedBox(height: 16),
 
-          _buildSectionTitle("8. Liên hệ"),
+          _buildSectionTitle("8. Contact Information"),
           _buildBodyText(
-            "Nếu bạn có thắc mắc hoặc góp ý về Điều khoản & Điều kiện, vui lòng liên hệ:\n\n"
-                "📧 Email: support@newsapp.com\n🌐 Website cung cấp api: https://newsapi.org",
+            "If you have any questions or feedback about these Terms & Conditions, please contact us:\n\n"
+                "Email: support@newsapp.com\nAPI provider website: https://newsapi.org",
           ),
           const SizedBox(height: 30),
 
           const Center(
             child: Text(
-              "Bằng việc tiếp tục sử dụng ứng dụng, bạn đồng ý với các điều khoản trên.",
+              "By continuing to use this app, you agree to these Terms & Conditions.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontStyle: FontStyle.italic,

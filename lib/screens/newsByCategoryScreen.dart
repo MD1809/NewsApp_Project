@@ -82,7 +82,7 @@ class _NewsByCategoryScreenState extends State<NewsByCategoryScreen> {
           : articles.isEmpty
           ? Container(
               color: Colors.white,
-              child: const Center(child: Text("Không có bài báo nào")),
+              child: const Center(child: Text("No articles found!")),
             )
           : Container(
               color: Colors.white,
