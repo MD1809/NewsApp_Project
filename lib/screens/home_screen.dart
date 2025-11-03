@@ -105,22 +105,24 @@ class _HomePageContentState extends State<HomePageContent> {
                 child: Row(
                   children: [
                     Expanded(child: CustomSearchBar(onSubmitted: _onSearch)),
-                    const SizedBox(width: 20),
-                    SizedBox(
-                      width: 54,
-                      height: 54,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.blueAccent,
-                        child: Text(
-                          userInitial ?? "?",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                    if(FirebaseAuth.instance.currentUser != null) ...[
+                      const SizedBox(width: 20),
+                      SizedBox(
+                        width: 54,
+                        height: 54,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.blueAccent,
+                          child: Text(
+                            userInitial ?? "?",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ]
                   ],
                 ),
               ),
