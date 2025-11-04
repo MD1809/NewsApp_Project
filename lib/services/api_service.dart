@@ -5,8 +5,10 @@ import 'package:news_app_project/models/news_model.dart';
 class NewsApiService {
   // =======================
   // api key
+  // 152d6cce7de3479b8e88a771f0e0ebcf
+  // 859796dcbc8b4b53a6edd33f45aaf1c9
   // =======================
-  final String apiKey = "859796dcbc8b4b53a6edd33f45aaf1c9";
+  final String apiKey = "152d6cce7de3479b8e88a771f0e0ebcf";
 
 
   // =======================
@@ -77,7 +79,8 @@ class NewsApiService {
     for (var category in categories) {
       try {
         final url = Uri.parse(
-          "https://newsapi.org/v2/top-headlines?country=us&language=en&category=${category.toLowerCase()}&pageSize=1&apiKey=$apiKey",
+          "https://newsapi.org/v2/top-headlines?country=us&"
+              "category=${category.toLowerCase()}&pageSize=1&apiKey=$apiKey",
         );
 
         final response = await http.get(url);
@@ -87,14 +90,14 @@ class NewsApiService {
           if (articles.isNotEmpty && articles.first["urlToImage"] != null) {
             result[category] = articles.first["urlToImage"];
           } else {
-            result[category] = "assets/images/xe.jpg";
+            result[category] = "https://developer.android.com/static/codelabs/basic-android-kotlin-compose-load-images/img/70e008c63a2a1139.png?hl=vi";
           }
         } else {
-          result[category] = "assets/images/xe.jpg";
+          result[category] = "https://developer.android.com/static/codelabs/basic-android-kotlin-compose-load-images/img/70e008c63a2a1139.png?hl=vi";
         }
       } catch (e) {
         print("Lỗi khi tải ảnh cho $category: $e");
-        result[category] = "assets/images/xe.jpg";
+        result[category] = "https://developer.android.com/static/codelabs/basic-android-kotlin-compose-load-images/img/70e008c63a2a1139.png?hl=vi";
       }
     }
 

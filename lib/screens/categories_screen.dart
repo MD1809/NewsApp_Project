@@ -14,6 +14,7 @@ class CategoriesScreen extends StatefulWidget {
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
   final List<String> categoryNames = [
+    "General",
     "Business",
     "Entertainment",
     "Health",
@@ -86,7 +87,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           final category = categoryNames[index];
                           final imageUrl =
                               categoryImages[category] ??
-                              "assets/images/xe.jpg";
+                              "https://developer.android.com/static/codelabs/basic-android-kotlin-compose-load-images/img/70e008c63a2a1139.png?hl=vi";
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
