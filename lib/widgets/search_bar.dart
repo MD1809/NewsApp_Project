@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatefulWidget {
-  // 1. Thêm biến để "hứng" hàm onSubmitted
   final Function(String)? onSubmitted;
 
   const CustomSearchBar({
     super.key,
-    this.onSubmitted, // 2. Thêm nó vào constructor
+    this.onSubmitted,
   });
 
   @override
@@ -14,40 +13,60 @@ class CustomSearchBar extends StatefulWidget {
 }
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
+  final TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return TextField(
-      onSubmitted: widget.onSubmitted,
-      cursorColor: Colors.lightBlue,
+      controller: _controller,
+      onSubmitted: (value) {
+        widget.onSubmitted?.call(value);
+      },
+      cursorColor: Theme.of(context).colorScheme.primary,
+      style: TextStyle(
+        color: Theme.of(context).textTheme.bodyMedium?.color,
+      ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.grey.shade200,
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 0,
-          horizontal: 0,
-        ),
+        fillColor: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
+        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+
         border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(20),
         ),
+
         enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(
-            color: Color(0xFF5B5B5B),
-            width: 1,
-            style: BorderStyle.solid,
+            color: isDark ? Colors.white24 : Colors.grey.shade400,
           ),
-          borderRadius: BorderRadius.circular(20),
         ),
+
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.lightBlue),
           borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+            width: 1.5,
+          ),
         ),
-        prefixIcon: const Padding(
-          padding: EdgeInsets.only(left: 16, right: 10),
-          child: Icon(Icons.search),
+
+        prefixIcon: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 10),
+          child: Icon(
+            Icons.search,
+            color: isDark ? Colors.white70 : Colors.black54,
+          ),
         ),
-        hintText: "Search ...",
-        hintStyle: const TextStyle(fontSize: 14),
+        prefixIconConstraints: const BoxConstraints(minWidth: 50),
+
+        hintText: "Search...",
+        hintStyle: TextStyle(
+          color: isDark ? Colors.white54 : Colors.black45,
+          fontSize: 14,
+        ),
       ),
     );
   }

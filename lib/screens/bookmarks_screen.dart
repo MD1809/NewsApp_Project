@@ -102,32 +102,34 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     if (isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: AppbarBuild(),
         ),
         body: Container(
           padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-          color: Colors.white,
+          color: theme.colorScheme.background,
           child: Column(
             children: [
               Row(
                 children: [
-                  Text("Saved Articles", style: TextStyle(fontSize: 18)),
+                  Text("Saved Articles", style: theme.textTheme.titleMedium,),
                 ],
               ),
               SizedBox(height: 10),
               Expanded(
                 child: savedArticles.isEmpty
-                    ? const Center(
-                        child: Text("No saved articles yet."),
+                    ? Center(
+                        child: Text("No saved articles yet.", style: theme.textTheme.bodyMedium,),
                       )
                     : ListView.builder(
                         itemCount: savedArticles.length,

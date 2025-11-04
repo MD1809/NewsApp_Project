@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:news_app_project/screens/main_screen.dart';
 import 'package:news_app_project/screens/signup_screen.dart';
 import 'package:news_app_project/services/firestore_service.dart';
+import 'package:provider/provider.dart';
+import 'package:news_app_project/services/theme_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,7 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
   bool _isLoading = false;
 
-  // Hàm đăng nhập Firebase
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -30,15 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text.trim(),
       );
 
-      // Gọi hàm đồng bộ bài viết cục bộ -> Firestore
       await ArticleService.syncLocalOnLogin();
 
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Login successful!')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login successful!')),
+        );
 
-        // Điều hướng sang MainScreen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const MainScreen()),
@@ -51,9 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (e.code == 'wrong-password') {
         message = 'Incorrect password.';
       }
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
     } finally {
       setState(() => _isLoading = false);
     }
@@ -61,47 +60,89 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeController = Provider.of<ThemeController>(context);
+    final isDark = themeController.isDark;
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.background,
       body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.only(left: 20.0, right: 20.0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.only(top: 50.0),
+            padding: const EdgeInsets.only(top: 20),
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
-                  Image.asset('assets/images/logo_app_news.png', height: 180),
-                  const SizedBox(height: 80),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Tiêu đề
-                      const Text(
-                        "Welcome back!",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) => const MainScreen()),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: colors.onBackground,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        "We're happy to have you back. "
-                            "Log in to see what's new and continue exploring!",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 14, color: Colors.black54),
+
+                      IconButton(
+                        onPressed: () {
+                          themeController.toggleTheme();
+                        },
+                        icon: Icon(
+                          isDark ? Icons.light_mode : Icons.dark_mode,
+                          color: colors.onBackground,
+                        ),
                       ),
                     ],
                   ),
+
+                  const SizedBox(height: 20),
+
+                  Image.asset('assets/images/logo_app_news.png', height: 180),
+                  const SizedBox(height: 60),
+
+                  // Welcome text
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Welcome back!",
+                        style: textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: colors.onBackground,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "We're happy to have you back. Log in to see what's new and continue exploring!",
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colors.onBackground.withOpacity(0.7),
+                        ),
+                      ),
+                    ],
+                  ),
+
                   const SizedBox(height: 40),
 
                   // Email
                   TextFormField(
                     controller: _emailController,
+                    style: TextStyle(color: colors.onBackground),
                     decoration: InputDecoration(
                       hintText: 'Email',
+                      hintStyle:
+                      TextStyle(color: colors.onBackground.withOpacity(0.5)),
+                      filled: true,
+                      fillColor: colors.surface,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -111,16 +152,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     validator: (value) =>
-                        value!.isEmpty ? 'Please enter your email' : null,
+                    value!.isEmpty ? 'Please enter your email' : null,
                   ),
+
                   const SizedBox(height: 24),
 
                   // Password
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
+                    style: TextStyle(color: colors.onBackground),
                     decoration: InputDecoration(
                       hintText: 'Password',
+                      hintStyle:
+                      TextStyle(color: colors.onBackground.withOpacity(0.5)),
+                      filled: true,
+                      fillColor: colors.surface,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -130,11 +177,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     validator: (value) =>
-                        value!.isEmpty ? 'Please enter your password' : null,
+                    value!.isEmpty ? 'Please enter your password' : null,
                   ),
+
                   const SizedBox(height: 0),
 
-                  // Remember me & Forgot password
+                  // Remember + Forgot password
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -142,57 +190,64 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           Checkbox(
                             value: _rememberMe,
-                            onChanged: (value) {
-                              setState(() => _rememberMe = value!);
-                            },
+                            onChanged: (value) =>
+                                setState(() => _rememberMe = value!),
                           ),
-                          const Text('Remember me'),
+                          Text(
+                            'Remember me',
+                            style: TextStyle(color: colors.onBackground),
+                          ),
                         ],
                       ),
                       TextButton(
-                        onPressed: () {
-                          // Thêm chức năng quên mật khẩu
-                        },
-                        child: const Text(
+                        onPressed: () {},
+                        child: Text(
                           'Forgot the password?',
-                          style: TextStyle(color: Colors.blue),
+                          style: TextStyle(color: colors.primary),
                         ),
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 60),
 
-                  // Nút Login
+                  // Login button
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _login,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF3B82F6),
+                        backgroundColor: colors.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: _isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                              'Login',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                          ? CircularProgressIndicator(
+                        color: colors.onPrimary,
+                      )
+                          : Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: colors.onPrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
+
                   const SizedBox(height: 20),
 
-                  // Đăng ký
+                  // Sign up
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don’t have an account? "),
+                      Text(
+                        "Don’t have an account? ",
+                        style: TextStyle(color: colors.onBackground),
+                      ),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
@@ -202,9 +257,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
-                        child: const Text(
+                        child: Text(
                           'Sign up',
-                          style: TextStyle(color: Colors.blue),
+                          style: TextStyle(color: colors.primary),
                         ),
                       ),
                     ],

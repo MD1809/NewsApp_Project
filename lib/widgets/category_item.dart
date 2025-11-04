@@ -13,6 +13,7 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = Colors.white;
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Stack(
@@ -23,13 +24,13 @@ class CategoryItem extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           Container(
-            color: Colors.black.withOpacity(0.35),
+            color: Colors.black.withOpacity(0.25),
           ),
           Center(
             child: Text(
               title,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: textColor,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),

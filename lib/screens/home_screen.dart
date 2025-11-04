@@ -89,7 +89,7 @@ class _HomePageContentState extends State<HomePageContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(60),
         child: AppbarBuild(),
@@ -97,7 +97,9 @@ class _HomePageContentState extends State<HomePageContent> {
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
         child: Container(
-          decoration: const BoxDecoration(color: Colors.white),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+          ),
           child: Column(
             children: [
               Container(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:news_app_project/screens/notifications_screen.dart';
+
 class AppbarBuild extends StatefulWidget {
   const AppbarBuild({super.key});
 
@@ -10,25 +12,26 @@ class AppbarBuild extends StatefulWidget {
 class _AppbarBuildState extends State<AppbarBuild> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.appBarTheme.backgroundColor,
       scrolledUnderElevation: 0,
       titleSpacing: 20,
       title: RichText(
         text: TextSpan(
           text: "News ",
-          style: TextStyle(
+          style: theme.textTheme.headlineSmall?.copyWith(
             fontSize: 28,
             fontWeight: FontWeight.w700,
-            color: Colors.blue,
+            color: theme.colorScheme.primary,
           ),
           children: [
             TextSpan(
               text: "App",
-              style: TextStyle(
+              style: theme.textTheme.headlineSmall?.copyWith(
                 fontSize: 28,
                 fontWeight: FontWeight.w600,
-                color: Colors.black,
+                color: theme.colorScheme.onBackground,
               ),
             ),
           ],
@@ -38,8 +41,17 @@ class _AppbarBuildState extends State<AppbarBuild> {
         Padding(
           padding: EdgeInsets.only(right: 20),
           child: IconButton(
-            icon: Icon(Icons.notifications_active, size: 28),
-            onPressed: () {},
+            icon: Icon(
+              Icons.notifications_active,
+              size: 28,
+              color: theme.colorScheme.onBackground,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+              );
+            },
           ),
         ),
       ],

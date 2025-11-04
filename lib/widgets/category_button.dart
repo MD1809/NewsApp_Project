@@ -9,25 +9,29 @@ class CategoryButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.isSelected,
-    required this.onTap
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(right: 18),
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 6),
+        margin: const EdgeInsets.only(right: 18),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue : Colors.transparent,
+          color: isSelected ? theme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.blue),
+          border: Border.all(
+            color: theme.primary,
+          ),
         ),
         child: Text(
           text,
           style: TextStyle(
-            color: isSelected ? Colors.white : Colors.blue,
+            color: isSelected ? theme.onPrimary : theme.primary,
             fontWeight: FontWeight.w500,
           ),
         ),

@@ -30,11 +30,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _loadUserProfile() async {
     final user = _auth.currentUser;
     if (user != null) {
-      final doc = await _firestore.collection('users').doc(user.uid).get();
-      if (doc.exists) {
-        final data = doc.data()!;
+      final snap = await _firestore.collection('users').doc(user.uid).get();
+      if (snap.exists) {
+        final data = snap.data()!;
         _usernameController.text = data['username'] ?? '';
         _gender = data['gender'];
+
         if (data['birthday'] != null) {
           _birthday = (data['birthday'] as Timestamp).toDate();
         }
@@ -45,33 +46,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<void> _updateProfile() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() {
-      _loading = true;
-    });
+
+    setState(() => _loading = true);
 
     final user = _auth.currentUser;
-    try {
-      if (user != null) {
-        // Cập nhật các field trong Firestore
-        await _firestore.collection('users').doc(user.uid).set({
-          'username': _usernameController.text.trim(),
-          'gender': _gender,
-          'birthday': _birthday != null ? Timestamp.fromDate(_birthday!) : null,
-        }, SetOptions(merge: true));
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')),
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: ${e.message}')));
-    } finally {
-      setState(() {
-        _loading = false;
-      });
+    try {
+      await _firestore.collection('users').doc(user!.uid).set({
+        'username': _usernameController.text.trim(),
+        'gender': _gender,
+        'birthday': _birthday != null ? Timestamp.fromDate(_birthday!) : null,
+      }, SetOptions(merge: true));
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Profile updated successfully")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
     }
+
+    setState(() => _loading = false);
   }
 
   Future<void> _pickBirthday() async {
@@ -81,10 +77,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
+
     if (picked != null) {
-      setState(() {
-        _birthday = picked;
-      });
+      setState(() => _birthday = picked);
     }
   }
 
@@ -92,112 +87,105 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
       appBar: AppBar(
         title: const Text('Edit Profile'),
         backgroundColor: Colors.white,
+        elevation: 0,
+        surfaceTintColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
+
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: [
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _usernameController,
-                      decoration: _inputDecoration('Username'),
-                      validator: (val) => val != null && val.isNotEmpty
-                          ? null
-                          : 'Enter a username',
-                    ),
-                    const SizedBox(height: 24),
-                    GestureDetector(
-                      onTap: _pickBirthday,
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 16,
-                        ),
-                        decoration: BoxDecoration(
-                          border: BoxBorder.all(width: 1),
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              _birthday != null
-                                  ? DateFormat('dd-MM-yyyy').format(_birthday!)
-                                  : 'Select Birthday',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: _birthday != null
-                                    ? Colors.black87
-                                    : Colors.grey[600],
-                              ),
-                            ),
-                            const Icon(
-                              Icons.calendar_month,
-                              color: Colors.blue,
-                            ),
-                          ],
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                controller: _usernameController,
+                decoration: _inputDecoration("Username"),
+                validator: (value) =>
+                value == null || value.isEmpty
+                    ? "Enter a username"
+                    : null,
+              ),
+
+              const SizedBox(height: 24),
+
+              GestureDetector(
+                onTap: _pickBirthday,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16, horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _birthday == null
+                            ? "Select Birthday"
+                            : DateFormat('dd-MM-yyyy').format(_birthday!),
+                        style: TextStyle(
+                          color: _birthday == null
+                              ? Colors.grey
+                              : Colors.black87,
+                          fontSize: 16,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    DropdownButtonFormField<String>(
-                      value: _gender,
-                      items: const [
-                        DropdownMenuItem(value: 'male', child: Text('Male')),
-                        DropdownMenuItem(
-                          value: 'female',
-                          child: Text('Female'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'hidden',
-                          child: Text('Hidden'),
-                        ),
-                      ],
-                      onChanged: (val) => setState(() => _gender = val),
-                      decoration: _inputDecoration('Gender'),
-                    ),
-                    const SizedBox(height: 60),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: _updateProfile,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text(
-                          'Save Changes',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                      const Icon(Icons.calendar_month,
+                          color: Colors.blue),
+                    ],
+                  ),
                 ),
               ),
-            ),
+
+              const SizedBox(height: 24),
+
+              DropdownButtonFormField<String>(
+                value: _gender,
+                decoration: _inputDecoration("Gender"),
+                items: const [
+                  DropdownMenuItem(
+                      value: "male", child: Text("Male")),
+                  DropdownMenuItem(
+                      value: "female", child: Text("Female")),
+                  DropdownMenuItem(
+                      value: "hidden", child: Text("Hidden")),
+                ],
+                onChanged: (value) => setState(() => _gender = value),
+              ),
+
+              const SizedBox(height: 50),
+
+              SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                  ),
+                  onPressed: _updateProfile,
+                  child: const Text(
+                    "Save Changes",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -207,7 +195,11 @@ InputDecoration _inputDecoration(String label) {
     labelText: label,
     filled: true,
     fillColor: Colors.grey[100],
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide.none,
+    ),
+    contentPadding:
+    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
   );
 }

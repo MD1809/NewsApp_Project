@@ -26,6 +26,7 @@ class ArticleFormsmallCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return InkWell(
       onTap: () {
         // Tạo đối tượng NewsArticle
@@ -47,7 +48,7 @@ class ArticleFormsmallCard extends StatelessWidget {
         );
       },
       child: Card(
-        color: Colors.grey[100],
+        color: theme.cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -64,7 +65,7 @@ class ArticleFormsmallCard extends StatelessWidget {
                     return Container(
                       width: 68,
                       height: 68,
-                      color: Colors.grey[200],
+                      color: theme.colorScheme.surfaceVariant,
                       child: Icon(
                         Icons.broken_image,
                         color: Colors.grey,
@@ -81,14 +82,20 @@ class ArticleFormsmallCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 6),
                     Text(
                       content,
-                      style: TextStyle(fontSize: 12),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontSize: 12,
+                        color: theme.textTheme.bodyMedium?.color?.withOpacity(0.75),
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -96,13 +103,17 @@ class ArticleFormsmallCard extends StatelessWidget {
                     Row(
                       children: [
                         SizedBox(width: 8),
-                        Icon(Icons.access_time, size: 14, color: Colors.black54),
+                        Icon(
+                          Icons.access_time,
+                          size: 14,
+                          color: theme.iconTheme.color?.withOpacity(0.7),
+                        ),
                         SizedBox(width: 3),
                         Text(
                           formatPublishedTime(publishedAt),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey,
+                            color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
                           ),
                         ),
                       ],

@@ -19,9 +19,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('You are not logged in!')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('You are not logged in!')));
       return;
     }
 
@@ -35,35 +34,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     setState(() => _loading = true);
 
     try {
-      // Xác thực lại người dùng bằng mật khẩu cũ
       final cred = EmailAuthProvider.credential(
         email: user.email!,
         password: _oldPasswordController.text,
       );
-      await user.reauthenticateWithCredential(cred);
 
-      // Cập nhật mật khẩu mới
+      await user.reauthenticateWithCredential(cred);
       await user.updatePassword(_newPasswordController.text);
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Password changed successfully!')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Password changed successfully!')));
 
-      // Clear fields
       _oldPasswordController.clear();
       _newPasswordController.clear();
       _confirmPasswordController.clear();
     } on FirebaseAuthException catch (e) {
       String message = 'Error: ${e.message}';
+      if (e.code == 'wrong-password') message = 'Incorrect old password';
 
-      // Nếu mật khẩu cũ sai
-      if (e.code == 'wrong-password') {
-        message = 'Incorrect old password';
-      }
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
     } finally {
       setState(() => _loading = false);
     }
@@ -77,72 +66,98 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     super.dispose();
   }
 
-  InputDecoration _inputDecoration(String label) {
+  InputDecoration _inputDecoration(BuildContext context, String label) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return InputDecoration(
       labelText: label,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+      labelStyle: TextStyle(color: colorScheme.onBackground.withOpacity(0.8)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: colorScheme.outline),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: colorScheme.outline),
+      ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Colors.blue),
+        borderSide: BorderSide(color: colorScheme.primary, width: 2),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Change Password'), backgroundColor: Colors.white, centerTitle: true),
+      backgroundColor: colorScheme.background,
+
+      appBar: AppBar(
+        title: Text(
+          'Change Password',
+          style: TextStyle(color: colorScheme.onBackground),
+        ),
+        backgroundColor: colorScheme.background,
+        centerTitle: true,
+        surfaceTintColor: colorScheme.background,
+        elevation: 1,
+        iconTheme: IconThemeData(color: colorScheme.onBackground),
+      ),
+
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(20.0, 60.0, 20.0, 0),
+        padding: const EdgeInsets.fromLTRB(20, 60, 20, 0),
         child: Column(
           children: [
             TextField(
               controller: _oldPasswordController,
               obscureText: true,
-              decoration: _inputDecoration('Old Password'),
+              style: TextStyle(color: colorScheme.onBackground),
+              decoration: _inputDecoration(context, 'Old Password'),
             ),
             const SizedBox(height: 24),
+
             TextField(
               controller: _newPasswordController,
               obscureText: true,
-              decoration: _inputDecoration('New Password'),
+              style: TextStyle(color: colorScheme.onBackground),
+              decoration: _inputDecoration(context, 'New Password'),
             ),
             const SizedBox(height: 24),
+
             TextField(
               controller: _confirmPasswordController,
               obscureText: true,
-              decoration: _inputDecoration('Confirm New Password'),
+              style: TextStyle(color: colorScheme.onBackground),
+              decoration: _inputDecoration(context, 'Confirm New Password'),
             ),
             const SizedBox(height: 40),
+
             SizedBox(
               width: double.infinity,
-              height: 50.0,
+              height: 50,
               child: ElevatedButton(
                 onPressed: _loading ? null : _changePassword,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 child: _loading
-                    ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : const Text(
-                        'Change Password',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                    ? CircularProgressIndicator(
+                  color: colorScheme.onPrimary,
+                  strokeWidth: 2,
+                )
+                    : Text(
+                  'Change Password',
+                  style: TextStyle(
+                    color: colorScheme.onPrimary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ],

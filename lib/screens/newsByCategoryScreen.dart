@@ -40,74 +40,81 @@ class _NewsByCategoryScreenState extends State<NewsByCategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      // 1. APP BAR
+      backgroundColor: colorScheme.background,
+
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        scrolledUnderElevation: 0,
+        backgroundColor: colorScheme.background,
+        surfaceTintColor: colorScheme.background,
         elevation: 1,
-        leading: Container(
-          margin: const EdgeInsets.only(left: 0),
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black87),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+        scrolledUnderElevation: 0,
+
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: colorScheme.onBackground),
+          onPressed: () => Navigator.pop(context),
         ),
+
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               'News ',
               style: TextStyle(
-                color: Colors.black,
+                color: colorScheme.onBackground,
                 fontWeight: FontWeight.w500,
               ),
             ),
             Text(
               widget.category,
-              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),
         centerTitle: true,
       ),
+
       body: isLoading
-          ? Container(
-              color: Colors.white,
-              child: const Center(child: CircularProgressIndicator()),
-            )
+          ? Center(
+        child: CircularProgressIndicator(
+          color: colorScheme.primary,
+        ),
+      )
           : articles.isEmpty
-          ? Container(
-              color: Colors.white,
-              child: const Center(child: Text("No articles found!")),
-            )
-          : Container(
-              color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-                child: ListView.builder(
-                  itemCount: articles.length,
-                  itemBuilder: (context, index) {
-                    final news = articles[index];
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 26.0),
-                      child: ArticleFormbigCard(
-                        image: news.imageUrl,
-                        NameArticle: news.title,
-                        publishedAt: news.publishedAt,
-                        author: news.author,
-                        content: news.content,
-                        description: news.description,
-                        url: news.url,
-                      ),
-                    );
-                  },
-                ),
+          ? Center(
+        child: Text(
+          "No articles found!",
+          style: TextStyle(color: colorScheme.onBackground),
+        ),
+      )
+          : Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 20.0, vertical: 10.0),
+        child: ListView.builder(
+          itemCount: articles.length,
+          itemBuilder: (context, index) {
+            final news = articles[index];
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: 26.0),
+              child: ArticleFormbigCard(
+                image: news.imageUrl,
+                NameArticle: news.title,
+                publishedAt: news.publishedAt,
+                author: news.author,
+                content: news.content,
+                description: news.description,
+                url: news.url,
               ),
-            ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

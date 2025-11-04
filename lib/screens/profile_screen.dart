@@ -9,24 +9,32 @@ import 'package:news_app_project/screens/signup_screen.dart';
 import 'package:news_app_project/screens/main_screen.dart';
 import 'package:news_app_project/screens/change_password_screen.dart';
 import 'package:news_app_project/screens/edit_profile_screen.dart';
-
+import 'package:provider/provider.dart';
+import 'package:news_app_project/services/theme_controller.dart';
+import 'package:news_app_project/screens/notifications_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F8F8),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Profile",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onPrimary,
+          ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: colorScheme.primary,
+        surfaceTintColor: colorScheme.primary,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -37,22 +45,29 @@ class ProfileScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: theme.cardColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 35,
-                    backgroundColor: Color(0xFFE0E0E0),
-                    child: Icon(Icons.person, size: 40, color: Colors.black54),
+                    backgroundColor: colorScheme.surfaceVariant,
+                    child: Icon(
+                      Icons.person,
+                      size: 40,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   if(user == null) ...[
-                    const Text(
+                    Text(
                       "Log in to personalize your experience",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                     ),
                     const SizedBox(height: 14),
 
@@ -61,6 +76,13 @@ class ProfileScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: colorScheme.primary,
+                            foregroundColor: colorScheme.onPrimary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -68,21 +90,17 @@ class ProfileScreen extends StatelessWidget {
                                   builder: (context) => const LoginScreen()),
                             );
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
+                          child: Text("Login"),
+                        ),
+                        const SizedBox(width: 10),
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: colorScheme.primary),
+                            foregroundColor: colorScheme.primary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        OutlinedButton(
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -90,16 +108,7 @@ class ProfileScreen extends StatelessWidget {
                                   builder: (context) => const SignUpScreen()),
                             );
                           },
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Colors.blue),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text(
-                            "Sign Up",
-                            style: TextStyle(color: Colors.blue),
-                          ),
+                          child: const Text("Sign Up"),
                         ),
                       ],
                     ),
@@ -130,21 +139,26 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             if(user == null) ...[
-              sectionTitle("Setting"),
-              buildSettingItem(
-                icon: Icons.language,
-                text: "Language",
-                onTap: () {},
+              sectionTitle(context, "Setting"),
+              Consumer<ThemeController>(
+                builder: (context, theme, _) {
+                  return buildThemeSwitch(context, theme);
+                },
               ),
               buildSettingItem(
                 icon: Icons.notifications,
                 text: "Notifications",
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                  );
+                },
               ),
 
               const SizedBox(height: 24),
 
-              sectionTitle("Other"),
+              sectionTitle(context, "Other"),
               buildSettingItem(
                 icon: Icons.description_outlined,
                 text: "Terms & conditions",
@@ -156,7 +170,7 @@ class ProfileScreen extends StatelessWidget {
                 },
               ),
             ]else ...[
-              sectionTitle("Profile"),
+              sectionTitle(context, "Profile"),
               buildSettingItem(
                 icon: Icons.edit,
                 text: "Edit Profile",
@@ -170,21 +184,26 @@ class ProfileScreen extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              sectionTitle("Setting"),
-              buildSettingItem(
-                icon: Icons.language,
-                text: "Language",
-                onTap: () {},
+              sectionTitle(context, "Setting"),
+              Consumer<ThemeController>(
+                builder: (context, theme, _) {
+                  return buildThemeSwitch(context, theme);
+                },
               ),
               buildSettingItem(
                 icon: Icons.notifications,
                 text: "Notifications",
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                  );
+                },
               ),
 
               const SizedBox(height: 24),
 
-              sectionTitle("Other"),
+              sectionTitle(context, "Other"),
               buildSettingItem(
                 icon: Icons.lock,
                 text: "Change password",
@@ -211,14 +230,17 @@ class ProfileScreen extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(top: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: ListTile(
                   leading: const Icon(Icons.logout, color: Colors.red),
                   title: const Text(
                     "Logout",
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   onTap: () async {
                     await FirebaseAuth.instance.signOut();
@@ -238,16 +260,28 @@ class ProfileScreen extends StatelessWidget {
   }
 
 
-  Widget sectionTitle(String title) {
+  Widget sectionTitle(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 16,
-          color: Colors.black87,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
+      ),
+    );
+  }
+  Widget buildThemeSwitch(BuildContext context, ThemeController theme) {
+    return ListTile(
+      leading: Icon(Icons.dark_mode),
+      title: Text("Dark Mode"),
+      trailing: Switch(
+        value: theme.isDark,
+        onChanged: (value) {
+          theme.toggleTheme();
+        },
       ),
     );
   }
