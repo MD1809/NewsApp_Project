@@ -19,7 +19,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   bool _isLoading = false;
 
@@ -59,7 +60,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         message = 'Password must be at least 6 characters.';
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -100,13 +103,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (_) => const LoginScreen()),
+                          MaterialPageRoute(
+                            builder: (_) => const LoginScreen(),
+                          ),
                         );
                       },
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: colors.onBackground,
-                      ),
+                      icon: Icon(Icons.arrow_back, color: colors.onBackground),
                     ),
 
                     IconButton(
@@ -121,10 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                Image.asset(
-                  'assets/images/logo_app_news.png',
-                  height: 180,
-                ),
+                Image.asset('assets/images/logo_app_news.png', height: 180),
                 const SizedBox(height: 20),
 
                 Text(
@@ -140,10 +139,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     labelText: 'Username',
                     labelStyle: TextStyle(color: textColor),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                   ),
-                  validator: (value) => value!.isEmpty ? 'Please enter a username' : null,
+                  validator: (value) =>
+                      value!.isEmpty ? 'Please enter a username' : null,
                 ),
                 const SizedBox(height: 24),
 
@@ -154,10 +159,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     labelText: 'Email',
                     labelStyle: TextStyle(color: textColor),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                   ),
-                  validator: (value) => value!.isEmpty ? 'Please enter an email' : null,
+                  validator: (value) =>
+                      value!.isEmpty ? 'Please enter an email' : null,
                 ),
                 const SizedBox(height: 24),
 
@@ -168,11 +179,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     labelStyle: TextStyle(color: textColor),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                   ),
-                  validator: (value) =>
-                  value!.length < 6 ? 'Password must be at least 6 characters' : null,
+                  validator: (value) => value!.length < 6
+                      ? 'Password must be at least 6 characters'
+                      : null,
                 ),
                 const SizedBox(height: 24),
 
@@ -183,11 +200,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     labelText: 'Confirm password',
                     labelStyle: TextStyle(color: textColor),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                   ),
-                  validator: (value) =>
-                  value != _passwordController.text ? 'Passwords do not match' : null,
+                  validator: (value) => value != _passwordController.text
+                      ? 'Passwords do not match'
+                      : null,
                 ),
                 const SizedBox(height: 10),
 
@@ -195,7 +218,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Note: Your password must contain at least 6 characters.',
-                    style: TextStyle(fontSize: 12, color: textColor!.withOpacity(0.6)),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: textColor!.withOpacity(0.6),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 80),
@@ -213,15 +239,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     child: _isLoading
-                        ? CircularProgressIndicator(color: theme.colorScheme.onPrimary)
+                        ? CircularProgressIndicator(
+                            color: theme.colorScheme.onPrimary,
+                          )
                         : Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        color: theme.colorScheme.onPrimary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                            'Sign Up',
+                            style: TextStyle(
+                              color: theme.colorScheme.onPrimary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 25),
@@ -237,7 +265,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onTap: () {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => const LoginScreen()),
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
                         );
                       },
                       child: Text(

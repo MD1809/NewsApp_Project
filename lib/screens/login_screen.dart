@@ -34,9 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
       await ArticleService.syncLocalOnLogin();
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login successful!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Login successful!')));
 
         Navigator.pushReplacement(
           context,
@@ -50,9 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (e.code == 'wrong-password') {
         message = 'Incorrect password.';
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -64,7 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final isDark = themeController.isDark;
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-
 
     return Scaffold(
       backgroundColor: colors.background,
@@ -84,7 +83,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (_) => const MainScreen()),
+                            MaterialPageRoute(
+                              builder: (_) => const MainScreen(),
+                            ),
                           );
                         },
                         icon: Icon(
@@ -123,7 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "We're happy to have you back. Log in to see what's new and continue exploring!",
+                        "We're happy to have you back. Log in to see what's "
+                            "new and continue exploring!",
                         style: textTheme.bodyMedium?.copyWith(
                           color: colors.onBackground.withOpacity(0.7),
                         ),
@@ -139,8 +141,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(color: colors.onBackground),
                     decoration: InputDecoration(
                       hintText: 'Email',
-                      hintStyle:
-                      TextStyle(color: colors.onBackground.withOpacity(0.5)),
+                      hintStyle: TextStyle(
+                        color: colors.onBackground.withOpacity(0.5),
+                      ),
                       filled: true,
                       fillColor: colors.surface,
                       border: OutlineInputBorder(
@@ -152,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     validator: (value) =>
-                    value!.isEmpty ? 'Please enter your email' : null,
+                        value!.isEmpty ? 'Please enter your email' : null,
                   ),
 
                   const SizedBox(height: 24),
@@ -164,8 +167,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(color: colors.onBackground),
                     decoration: InputDecoration(
                       hintText: 'Password',
-                      hintStyle:
-                      TextStyle(color: colors.onBackground.withOpacity(0.5)),
+                      hintStyle: TextStyle(
+                        color: colors.onBackground.withOpacity(0.5),
+                      ),
                       filled: true,
                       fillColor: colors.surface,
                       border: OutlineInputBorder(
@@ -177,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     validator: (value) =>
-                    value!.isEmpty ? 'Please enter your password' : null,
+                        value!.isEmpty ? 'Please enter your password' : null,
                   ),
 
                   const SizedBox(height: 0),
@@ -224,17 +228,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       child: _isLoading
-                          ? CircularProgressIndicator(
-                        color: colors.onPrimary,
-                      )
+                          ? CircularProgressIndicator(color: colors.onPrimary)
                           : Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: colors.onPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                              'Login',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: colors.onPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                     ),
                   ),
 

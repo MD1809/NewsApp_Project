@@ -94,7 +94,9 @@ class ArticleFormsmallCard extends StatelessWidget {
                       content,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontSize: 12,
-                        color: theme.textTheme.bodyMedium?.color?.withOpacity(0.75),
+                        color: theme.textTheme.bodyMedium?.color?.withOpacity(
+                          0.75,
+                        ),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -113,7 +115,8 @@ class ArticleFormsmallCard extends StatelessWidget {
                           formatPublishedTime(publishedAt),
                           style: TextStyle(
                             fontSize: 12,
-                            color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+                            color: theme.textTheme.bodySmall?.color
+                                ?.withOpacity(0.7),
                           ),
                         ),
                       ],

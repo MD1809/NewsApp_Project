@@ -58,7 +58,7 @@ class NewsArticle {
     );
   }
 
-  /// 🔹 Chuyển sang Map để lưu vào Firestore
+  // Chuyển sang Map để lưu vào Firestore
   Map<String, dynamic> toFirestore() {
     return {
       'title': title,
@@ -67,11 +67,11 @@ class NewsArticle {
       'url': url,
       'imageUrl': imageUrl,
       'author': author,
-      'publishedAt': Timestamp.fromDate(publishedAt), // 👉 Lưu Timestamp Firestore
+      'publishedAt': Timestamp.fromDate(publishedAt),
     };
   }
 
-  /// 🔹 Chuyển từ Firestore snapshot sang NewsArticle
+  // Chuyển từ Firestore snapshot sang NewsArticle
   factory NewsArticle.fromFirestore(Map<String, dynamic> data) {
     final publishedField = data['publishedAt'];
     DateTime publishedTime;

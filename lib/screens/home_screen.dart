@@ -209,7 +209,7 @@ class _HomePageContentState extends State<HomePageContent> {
                                   child: ArticleFormbigCard(
                                     widthArticle: 320.0,
                                     image: article.imageUrl,
-                                    NameArticle: article.title,
+                                          NameArticle: article.title,
                                     publishedAt: article.publishedAt,
                                     author: article.author,
                                     content: article.content,

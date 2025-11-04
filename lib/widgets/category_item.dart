@@ -4,12 +4,7 @@ class CategoryItem extends StatelessWidget {
   final String title;
   final String imageUrl;
 
-  const CategoryItem({
-    super.key,
-    required this.title,
-    required this.imageUrl,
-  });
-
+  const CategoryItem({super.key, required this.title, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +14,8 @@ class CategoryItem extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-          ),
-          Container(
-            color: Colors.black.withOpacity(0.25),
-          ),
+          Image.network(imageUrl, fit: BoxFit.cover),
+          Container(color: Colors.black.withOpacity(0.25)),
           Center(
             child: Text(
               title,

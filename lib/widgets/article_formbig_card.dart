@@ -91,7 +91,7 @@ class ArticleFormbigCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           NameArticle,
-                          style: Theme.of(context).textTheme.bodyLarge, // ✅
+                          style: Theme.of(context).textTheme.bodyLarge,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -103,21 +103,18 @@ class ArticleFormbigCard extends StatelessWidget {
                       Icon(
                         Icons.access_time,
                         size: 14,
-                        color: Theme.of(context)
-                            .iconTheme
-                            .color
-                            ?.withOpacity(0.6),
+                        color: Theme.of(
+                          context,
+                        ).iconTheme.color?.withOpacity(0.6),
                       ),
                       const SizedBox(width: 3),
                       Text(
                         formatPublishedTime(publishedAt),
                         style: TextStyle(
                           fontSize: 12,
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.color
-                              ?.withOpacity(0.7),
+                          color: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.color?.withOpacity(0.7),
                         ),
                       ),
                     ],

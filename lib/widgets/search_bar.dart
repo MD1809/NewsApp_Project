@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class CustomSearchBar extends StatefulWidget {
   final Function(String)? onSubmitted;
 
-  const CustomSearchBar({
-    super.key,
-    this.onSubmitted,
-  });
+  const CustomSearchBar({super.key, this.onSubmitted});
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
@@ -25,9 +22,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         widget.onSubmitted?.call(value);
       },
       cursorColor: Theme.of(context).colorScheme.primary,
-      style: TextStyle(
-        color: Theme.of(context).textTheme.bodyMedium?.color,
-      ),
+      style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
       decoration: InputDecoration(
         filled: true,
         fillColor: isDark ? Colors.grey.shade800 : Colors.grey.shade200,

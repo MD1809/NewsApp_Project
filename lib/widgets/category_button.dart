@@ -24,9 +24,7 @@ class CategoryButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? theme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: theme.primary,
-          ),
+          border: Border.all(color: theme.primary),
         ),
         child: Text(
           text,

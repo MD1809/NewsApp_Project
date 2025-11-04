@@ -19,8 +19,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('You are not logged in!')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('You are not logged in!')));
       return;
     }
 
@@ -42,8 +43,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       await user.reauthenticateWithCredential(cred);
       await user.updatePassword(_newPasswordController.text);
 
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Password changed successfully!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password changed successfully!')),
+      );
 
       _oldPasswordController.clear();
       _newPasswordController.clear();
@@ -52,7 +54,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       String message = 'Error: ${e.message}';
       if (e.code == 'wrong-password') message = 'Incorrect old password';
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     } finally {
       setState(() => _loading = false);
     }
@@ -147,17 +151,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
                 child: _loading
                     ? CircularProgressIndicator(
-                  color: colorScheme.onPrimary,
-                  strokeWidth: 2,
-                )
+                        color: colorScheme.onPrimary,
+                        strokeWidth: 2,
+                      )
                     : Text(
-                  'Change Password',
-                  style: TextStyle(
-                    color: colorScheme.onPrimary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                        'Change Password',
+                        style: TextStyle(
+                          color: colorScheme.onPrimary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
               ),
             ),
           ],

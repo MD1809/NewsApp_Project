@@ -5,18 +5,19 @@ import 'package:news_app_project/models/news_model.dart';
 class NewsApiService {
   // =======================
   // api key
+  // f50c554a02a0452a9fc5cfec0d81cb49
   // 152d6cce7de3479b8e88a771f0e0ebcf
   // 859796dcbc8b4b53a6edd33f45aaf1c9
   // =======================
   final String apiKey = "152d6cce7de3479b8e88a771f0e0ebcf";
 
-
   // =======================
   // api lấy các bài báo top trending
   // =======================
   Future<List<NewsArticle>> fetchNewsTrending() async {
-    final String url = "https://newsapi.org/v2/top-headlines?language=en&country=us&apiKey=$apiKey";
-
+    final String url =
+        "https://newsapi.org/v2/top-headlines?"
+        "language=en&country=us&apiKey=$apiKey";
 
     final response = await http.get(Uri.parse(url));
 
@@ -25,31 +26,31 @@ class NewsApiService {
 
       if (dataTrending['status'] == 'ok') {
         final List<dynamic> articlesJson = dataTrending['articles'];
-        return articlesJson
-            .map((json) => NewsArticle.fromJson(json))
-            .toList();
-      }else {
+        return articlesJson.map((json) => NewsArticle.fromJson(json)).toList();
+      } else {
         throw Exception(dataTrending['message'] ?? 'Lỗi không xác định từ API');
       }
     } else {
-      throw Exception('Không thể tải tin tức (Status code: ${response.statusCode})');
+      throw Exception(
+        'Không thể tải tin tức (Status code: ${response.statusCode})',
+      );
     }
   }
-
 
   // =======================
   // api lấy các bài báo theo thể loại
   // =======================
   Future<List<NewsArticle>> fetchNews(String selectedCategory) async {
+    String categoryParam = selectedCategory == "All"
+        ? ""
+        : "&category=${selectedCategory.toLowerCase()}";
 
-    String categoryParam = selectedCategory == "All" ? "" : "&category=${selectedCategory.toLowerCase()}";
-
-    final String url = "https://newsapi.org/v2/top-headlines?"
+    final String url =
+        "https://newsapi.org/v2/top-headlines?"
         "language=en&"
         "country=us"
         "$categoryParam"
         "&apiKey=$apiKey";
-
 
     final response = await http.get(Uri.parse(url));
 
@@ -58,21 +59,23 @@ class NewsApiService {
 
       if (data['status'] == 'ok') {
         final List<dynamic> articlesJson = data['articles'];
-        return articlesJson
-            .map((json) => NewsArticle.fromJson(json))
-            .toList();
-      }else {
+        return articlesJson.map((json) => NewsArticle.fromJson(json)).toList();
+      } else {
         throw Exception(data['message'] ?? 'Lỗi không xác định từ API');
       }
     } else {
-      throw Exception('Không thể tải tin tức (Status code: ${response.statusCode})');
+      throw Exception(
+        'Không thể tải tin tức (Status code: ${response.statusCode})',
+      );
     }
   }
 
   // =======================
   // api lấy ảnh cho category item
   // =======================
-  Future<Map<String, String>> fetchCategoryImages(List<String> categories) async {
+  Future<Map<String, String>> fetchCategoryImages(
+    List<String> categories,
+  ) async {
     final Map<String, String> result = {};
 
     // Gọi tuần tự (có thể cải tiến dùng Future.wait)
@@ -80,7 +83,7 @@ class NewsApiService {
       try {
         final url = Uri.parse(
           "https://newsapi.org/v2/top-headlines?country=us&"
-              "category=${category.toLowerCase()}&pageSize=1&apiKey=$apiKey",
+          "category=${category.toLowerCase()}&pageSize=1&apiKey=$apiKey",
         );
 
         final response = await http.get(url);
@@ -90,19 +93,29 @@ class NewsApiService {
           if (articles.isNotEmpty && articles.first["urlToImage"] != null) {
             result[category] = articles.first["urlToImage"];
           } else {
-            result[category] = "https://developer.android.com/static/codelabs/basic-android-kotlin-compose-load-images/img/70e008c63a2a1139.png?hl=vi";
+            result[category] =
+                "https://developer.android.com/static/codelabs/"
+                    "basic-android-kotlin-compose-load-images/img/"
+                    "70e008c63a2a1139.png?hl=vi";
           }
         } else {
-          result[category] = "https://developer.android.com/static/codelabs/basic-android-kotlin-compose-load-images/img/70e008c63a2a1139.png?hl=vi";
+          result[category] =
+              "https://developer.android.com/static/codelabs/"
+                  "basic-android-kotlin-compose-load-images/img/"
+                  "70e008c63a2a1139.png?hl=vi";
         }
       } catch (e) {
         print("Lỗi khi tải ảnh cho $category: $e");
-        result[category] = "https://developer.android.com/static/codelabs/basic-android-kotlin-compose-load-images/img/70e008c63a2a1139.png?hl=vi";
+        result[category] =
+            "https://developer.android.com/static/codelabs/"
+                "basic-android-kotlin-compose-load-images/img/"
+                "70e008c63a2a1139.png?hl=vi";
       }
     }
 
     return result;
   }
+
   // ============================
   // Hàm tìm kiếm bài viết
   // ============================
@@ -110,7 +123,8 @@ class NewsApiService {
     if (query.isEmpty) return [];
 
     final Uri url = Uri.parse(
-      'https://newsapi.org/v2/everything?q=$query&language=en&sortBy=publishedAt&pageSize=18&apiKey=$apiKey',
+      'https://newsapi.org/v2/everything?q=$query&language=en&'
+          'sortBy=publishedAt&pageSize=18&apiKey=$apiKey',
     );
 
     final response = await http.get(url);
@@ -118,9 +132,7 @@ class NewsApiService {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
       final List articlesJson = data['articles'];
-      return articlesJson
-          .map((json) => NewsArticle.fromJson(json))
-          .toList();
+      return articlesJson.map((json) => NewsArticle.fromJson(json)).toList();
     } else {
       throw Exception('Lỗi khi gọi API: ${response.statusCode}');
     }

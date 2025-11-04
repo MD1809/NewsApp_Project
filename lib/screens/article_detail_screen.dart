@@ -7,10 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class Articledetailscreen extends StatefulWidget {
   final NewsArticle article;
 
-  const Articledetailscreen({
-    super.key,
-    required this.article,
-  });
+  const Articledetailscreen({super.key, required this.article});
 
   @override
   State<Articledetailscreen> createState() => _ArticledetailscreenState();
@@ -38,9 +35,9 @@ class _ArticledetailscreenState extends State<Articledetailscreen> {
       );
     } else {
       await ArticleService.saveArticle(widget.article);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Article saved')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Article saved')));
     }
     setState(() => isSaved = !isSaved);
   }
@@ -63,9 +60,9 @@ class _ArticledetailscreenState extends State<Articledetailscreen> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 
@@ -126,7 +123,6 @@ class _ArticledetailscreenState extends State<Articledetailscreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ✅ Title
                   Text(
                     widget.article.title,
                     style: TextStyle(
@@ -138,7 +134,6 @@ class _ArticledetailscreenState extends State<Articledetailscreen> {
 
                   const SizedBox(height: 12),
 
-                  // ✅ Author + Time
                   Row(
                     children: [
                       CircleAvatar(
@@ -146,15 +141,14 @@ class _ArticledetailscreenState extends State<Articledetailscreen> {
                         backgroundColor: colorScheme.primary,
                         child: widget.article.author.isNotEmpty
                             ? Text(
-                          widget.article.author[0].toUpperCase(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                            : Icon(Icons.person,
-                            color: Colors.white, size: 14),
+                                widget.article.author[0].toUpperCase(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : Icon(Icons.person, color: Colors.white, size: 14),
                       ),
                       const SizedBox(width: 5),
                       Flexible(
@@ -169,8 +163,11 @@ class _ArticledetailscreenState extends State<Articledetailscreen> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Icon(Icons.access_time,
-                          size: 14, color: colorScheme.onBackground),
+                      Icon(
+                        Icons.access_time,
+                        size: 14,
+                        color: colorScheme.onBackground,
+                      ),
                       const SizedBox(width: 3),
                       Text(
                         formatPublishedTime(widget.article.publishedAt),
@@ -184,7 +181,6 @@ class _ArticledetailscreenState extends State<Articledetailscreen> {
 
                   const SizedBox(height: 16),
 
-
                   Text(
                     widget.article.content,
                     style: TextStyle(
@@ -196,7 +192,6 @@ class _ArticledetailscreenState extends State<Articledetailscreen> {
 
                   const SizedBox(height: 60),
 
-
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -204,7 +199,9 @@ class _ArticledetailscreenState extends State<Articledetailscreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: colorScheme.primary,
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

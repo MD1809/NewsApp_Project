@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeController extends ChangeNotifier {
   bool _isDark = false;
+
   bool get isDark => _isDark;
 
   ThemeController() {

@@ -33,7 +33,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     loadCategoryImages();
   }
 
-  /// 🔹 Gọi API lấy ảnh cho từng category
+  // Gọi API lấy ảnh cho từng category
   Future<void> loadCategoryImages() async {
     try {
       final images = await _getImageNewsService.fetchCategoryImages(
@@ -44,7 +44,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         isLoading = false;
       });
     } catch (e) {
-      print("Lỗi load category images: $e");
       setState(() => isLoading = false);
     }
   }
@@ -73,7 +72,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 child: isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : categoryImages.isEmpty
-                    ? const Center(child: Text('No news found for this category'))
+                    ? const Center(
+                        child: Text('No news found for this category'),
+                      )
                     : GridView.builder(
                         itemCount: categoryNames.length,
                         gridDelegate:
@@ -87,7 +88,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           final category = categoryNames[index];
                           final imageUrl =
                               categoryImages[category] ??
-                              "https://developer.android.com/static/codelabs/basic-android-kotlin-compose-load-images/img/70e008c63a2a1139.png?hl=vi";
+                              "https://developer.android.com/static/codelabs/"
+                                  "basic-android-kotlin-compose-load-images/"
+                                  "img/70e008c63a2a1139.png?hl=vi";
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(

@@ -80,41 +80,39 @@ class _NewsByCategoryScreenState extends State<NewsByCategoryScreen> {
       ),
 
       body: isLoading
-          ? Center(
-        child: CircularProgressIndicator(
-          color: colorScheme.primary,
-        ),
-      )
+          ? Center(child: CircularProgressIndicator(color: colorScheme.primary))
           : articles.isEmpty
           ? Center(
-        child: Text(
-          "No articles found!",
-          style: TextStyle(color: colorScheme.onBackground),
-        ),
-      )
-          : Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 20.0, vertical: 10.0),
-        child: ListView.builder(
-          itemCount: articles.length,
-          itemBuilder: (context, index) {
-            final news = articles[index];
-
-            return Container(
-              margin: const EdgeInsets.only(bottom: 26.0),
-              child: ArticleFormbigCard(
-                image: news.imageUrl,
-                NameArticle: news.title,
-                publishedAt: news.publishedAt,
-                author: news.author,
-                content: news.content,
-                description: news.description,
-                url: news.url,
+              child: Text(
+                "No articles found!",
+                style: TextStyle(color: colorScheme.onBackground),
               ),
-            );
-          },
-        ),
-      ),
+            )
+          : Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 10.0,
+              ),
+              child: ListView.builder(
+                itemCount: articles.length,
+                itemBuilder: (context, index) {
+                  final news = articles[index];
+
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 26.0),
+                    child: ArticleFormbigCard(
+                      image: news.imageUrl,
+                      NameArticle: news.title,
+                      publishedAt: news.publishedAt,
+                      author: news.author,
+                      content: news.content,
+                      description: news.description,
+                      url: news.url,
+                    ),
+                  );
+                },
+              ),
+            ),
     );
   }
 }

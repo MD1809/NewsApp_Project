@@ -28,7 +28,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     loadSavedArticles();
   }
 
-  /// Hàm load bài viết đã lưu
+  // Hàm load bài viết đã lưu
   Future<void> loadSavedArticles() async {
     final user = FirebaseAuth.instance.currentUser;
 
@@ -70,7 +70,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
         isLoading = false;
       });
     } else {
-      // 🔹 Nếu chưa đăng nhập → Lấy từ SQLite
+      // Nếu chưa đăng nhập → Lấy từ SQLite
       final articles = await DatabaseNewsApp.instance.getSavedArticles();
       setState(() {
         savedArticles = articles;
@@ -79,7 +79,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     }
   }
 
-  /// Hàm xoá bài viết
+  // Hàm xoá bài viết
   Future<void> deleteArticle(String url) async {
     final user = FirebaseAuth.instance.currentUser;
 
@@ -122,14 +122,17 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
             children: [
               Row(
                 children: [
-                  Text("Saved Articles", style: theme.textTheme.titleMedium,),
+                  Text("Saved Articles", style: theme.textTheme.titleMedium),
                 ],
               ),
               SizedBox(height: 10),
               Expanded(
                 child: savedArticles.isEmpty
                     ? Center(
-                        child: Text("No saved articles yet.", style: theme.textTheme.bodyMedium,),
+                        child: Text(
+                          "No saved articles yet.",
+                          style: theme.textTheme.bodyMedium,
+                        ),
                       )
                     : ListView.builder(
                         itemCount: savedArticles.length,

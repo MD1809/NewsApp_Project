@@ -11,10 +11,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Khởi tạo Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   // Kích hoạt tiếng Việt cho timeago
   timeago.setLocaleMessages('vi', ViMessages());
 

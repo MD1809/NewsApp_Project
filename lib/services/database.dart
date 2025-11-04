@@ -21,11 +21,7 @@ class DatabaseNewsApp {
     final path = join(dbPath, filePath);
 
     // Mở (hoặc tạo mới) database
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _createDB,
-    );
+    return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
   // Chỉ chạy 1 lần duy nhất khi DB mới được tạo
@@ -47,20 +43,16 @@ class DatabaseNewsApp {
   // lưu bài viết vào cơ sở dữ liệu
   Future<void> insertArticle(NewsArticle article) async {
     final db = await instance.database;
-    await db.insert(
-      'articlesSaved',
-      {
-        'url': article.url,
-        'title': article.title,
-        'description': article.description,
-        'content': article.content,
-        'imageUrl': article.imageUrl,
-        'author': article.author,
-        'publishedAt': article.publishedAt.toIso8601String(),
-        'created_at': DateTime.now().toIso8601String(),
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await db.insert('articlesSaved', {
+      'url': article.url,
+      'title': article.title,
+      'description': article.description,
+      'content': article.content,
+      'imageUrl': article.imageUrl,
+      'author': article.author,
+      'publishedAt': article.publishedAt.toIso8601String(),
+      'created_at': DateTime.now().toIso8601String(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   // lấy danh sách các bài đã lưu (mới nhất ở trên cùng)
@@ -84,21 +76,20 @@ class DatabaseNewsApp {
     }).toList();
   }
 
-
   // xóa 1 bài viết đã lưu theo id
   Future<void> deleteArticleByUrl(String url) async {
     final db = await instance.database;
-    await db.delete(
-      'articlesSaved',
-      where: 'url = ?',
-      whereArgs: [url],
-    );
+    await db.delete('articlesSaved', where: 'url = ?', whereArgs: [url]);
   }
 
   // Kiểm tra xem bài viết đã được lưu chưa
   Future<bool> isSaved(String url) async {
     final db = await instance.database;
-    final result = await db.query('articlesSaved', where: 'url = ?', whereArgs: [url]);
+    final result = await db.query(
+      'articlesSaved',
+      where: 'url = ?',
+      whereArgs: [url],
+    );
     return result.isNotEmpty;
   }
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:news_app_project/widgets/setting_item.dart';
 import 'package:news_app_project/screens/termsAndConditionsScreen.dart';
@@ -60,14 +59,14 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  if(user == null) ...[
+                  if (user == null) ...[
                     Text(
                       "Log in to personalize your experience",
                       textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
                     ),
                     const SizedBox(height: 14),
 
@@ -87,7 +86,8 @@ class ProfileScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginScreen()),
+                                builder: (context) => const LoginScreen(),
+                              ),
                             );
                           },
                           child: Text("Login"),
@@ -105,32 +105,43 @@ class ProfileScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const SignUpScreen()),
+                                builder: (context) => const SignUpScreen(),
+                              ),
                             );
                           },
                           child: const Text("Sign Up"),
                         ),
                       ],
                     ),
-                  ]else ...[
+                  ] else ...[
                     FutureBuilder<DocumentSnapshot>(
-                      future: FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
+                      future: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid)
+                          .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData) return const CircularProgressIndicator();
+                        if (!snapshot.hasData)
+                          return const CircularProgressIndicator();
 
-                        var data = snapshot.data!.data() as Map<String, dynamic>?;
+                        var data =
+                            snapshot.data!.data() as Map<String, dynamic>?;
 
                         return Column(
                           children: [
                             const Text("Logged in with account"),
                             Text(
-                              data?['username'] ?? user.email ?? "No name available",
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              data?['username'] ??
+                                  user.email ??
+                                  "No name available",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         );
                       },
-                    )
+                    ),
                   ],
                 ],
               ),
@@ -138,7 +149,7 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            if(user == null) ...[
+            if (user == null) ...[
               sectionTitle(context, "Setting"),
               Consumer<ThemeController>(
                 builder: (context, theme, _) {
@@ -151,7 +162,9 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                    MaterialPageRoute(
+                      builder: (_) => const NotificationsScreen(),
+                    ),
                   );
                 },
               ),
@@ -169,7 +182,7 @@ class ProfileScreen extends StatelessWidget {
                   );
                 },
               ),
-            ]else ...[
+            ] else ...[
               sectionTitle(context, "Profile"),
               buildSettingItem(
                 icon: Icons.edit,
@@ -177,7 +190,9 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+                    MaterialPageRoute(
+                      builder: (_) => const EditProfileScreen(),
+                    ),
                   );
                 },
               ),
@@ -196,7 +211,9 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                    MaterialPageRoute(
+                      builder: (_) => const NotificationsScreen(),
+                    ),
                   );
                 },
               ),
@@ -210,7 +227,9 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const ChangePasswordScreen()),
+                    MaterialPageRoute(
+                      builder: (_) => const ChangePasswordScreen(),
+                    ),
                   );
                 },
               ),
@@ -246,8 +265,10 @@ class ProfileScreen extends StatelessWidget {
                     await FirebaseAuth.instance.signOut();
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => const MainScreen()),
-                          (route) => false,
+                      MaterialPageRoute(
+                        builder: (context) => const MainScreen(),
+                      ),
+                      (route) => false,
                     );
                   },
                 ),
@@ -258,7 +279,6 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-
 
   Widget sectionTitle(BuildContext context, String title) {
     return Padding(
@@ -273,6 +293,7 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
+
   Widget buildThemeSwitch(BuildContext context, ThemeController theme) {
     return ListTile(
       leading: Icon(Icons.dark_mode),

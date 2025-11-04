@@ -62,9 +62,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         const SnackBar(content: Text("Profile updated successfully")),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     }
 
     setState(() => _loading = false);
@@ -85,121 +85,125 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
-
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Edit Profile'),
-        backgroundColor: Colors.white,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
-        surfaceTintColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: theme.appBarTheme.iconTheme,
+        surfaceTintColor: theme.scaffoldBackgroundColor,
       ),
 
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: _usernameController,
-                decoration: _inputDecoration("Username"),
-                validator: (value) =>
-                value == null || value.isEmpty
-                    ? "Enter a username"
-                    : null,
-              ),
+              padding: const EdgeInsets.all(20),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    TextFormField(
+                      controller: _usernameController,
+                      decoration: _inputDecoration("Username", theme),
+                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
+                      validator: (value) => value == null || value.isEmpty
+                          ? "Enter a username"
+                          : null,
+                    ),
 
-              const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-              GestureDetector(
-                onTap: _pickBirthday,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        _birthday == null
-                            ? "Select Birthday"
-                            : DateFormat('dd-MM-yyyy').format(_birthday!),
-                        style: TextStyle(
-                          color: _birthday == null
-                              ? Colors.grey
-                              : Colors.black87,
-                          fontSize: 16,
+                    GestureDetector(
+                      onTap: _pickBirthday,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 16,
+                        ),
+                        decoration: BoxDecoration(
+                          color: theme.inputDecorationTheme.fillColor,
+                          border: Border.all(color: theme.dividerColor),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _birthday == null
+                                  ? "Select Birthday"
+                                  : DateFormat('dd-MM-yyyy').format(_birthday!),
+                              style: TextStyle(
+                                color: _birthday == null
+                                    ? theme.hintColor
+                                    : theme.textTheme.bodyLarge?.color,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Icon(
+                              Icons.calendar_month,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ],
                         ),
                       ),
-                      const Icon(Icons.calendar_month,
-                          color: Colors.blue),
-                    ],
-                  ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    DropdownButtonFormField<String>(
+                      value: _gender,
+                      decoration: _inputDecoration("Gender", theme),
+                      items: const [
+                        DropdownMenuItem(value: "male", child: Text("Male")),
+                        DropdownMenuItem(
+                            value: "female", child: Text("Female")),
+                        DropdownMenuItem(
+                            value: "hidden", child: Text("Hidden")),
+                      ],
+                      onChanged: (value) => setState(() => _gender = value),
+                    ),
+
+                    const SizedBox(height: 50),
+
+                    SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: _updateProfile,
+                        child: Text(
+                          "Save Changes",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-
-              const SizedBox(height: 24),
-
-              DropdownButtonFormField<String>(
-                value: _gender,
-                decoration: _inputDecoration("Gender"),
-                items: const [
-                  DropdownMenuItem(
-                      value: "male", child: Text("Male")),
-                  DropdownMenuItem(
-                      value: "female", child: Text("Female")),
-                  DropdownMenuItem(
-                      value: "hidden", child: Text("Hidden")),
-                ],
-                onChanged: (value) => setState(() => _gender = value),
-              ),
-
-              const SizedBox(height: 50),
-
-              SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                  onPressed: _updateProfile,
-                  child: const Text(
-                    "Save Changes",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
 
-InputDecoration _inputDecoration(String label) {
+InputDecoration _inputDecoration(String label, ThemeData theme) {
   return InputDecoration(
     labelText: label,
     filled: true,
-    fillColor: Colors.grey[100],
+    fillColor: theme.inputDecorationTheme.fillColor,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
       borderSide: BorderSide.none,
     ),
-    contentPadding:
-    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
   );
 }
